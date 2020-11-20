@@ -39,16 +39,17 @@ public class PSVHashSetImplTest {
 
     @Test()
     public void testAddElement() {
-        Assert.assertTrue(psvHashSet.size() == 3);
+        Assert.assertEquals(3,psvHashSet.size());
         psvHashSet5.addElement(null);
-        Assert.assertTrue(psvHashSet5.size() == 3);
+        System.out.println(psvHashSet5);
+        Assert.assertEquals(3, psvHashSet5.size());
     }
 
     @Test()
     public void testRemoveElement() {
-        Assert.assertTrue(psvHashSet4.size() == 3);
+        Assert.assertEquals(3,psvHashSet4.size());
         psvHashSet4.removeElement(2.5);
-        Assert.assertTrue(psvHashSet4.size() == 2);
+        Assert.assertEquals(2,psvHashSet4.size());
     }
 
     @Test()
@@ -59,7 +60,7 @@ public class PSVHashSetImplTest {
 
     @Test
     public void testSize() {
-        Assert.assertEquals(psvHashSet.size(), 3);
+        Assert.assertEquals(3, psvHashSet.size());
     }
 
     @Test

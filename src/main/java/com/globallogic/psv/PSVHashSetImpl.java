@@ -18,7 +18,7 @@ public class PSVHashSetImpl<E> {
 
         public final String toString() {
             if (element == null) {
-                return "null";
+                return "";
             }
             return element.toString();
         }
@@ -45,27 +45,27 @@ public class PSVHashSetImpl<E> {
         if (table == null) {
             table = new Node[0];
         }
-        if (element == null && tableHasOneNull()) {
+        if (element == null && isTableHasOneNull()) {
             return false;
         }
         if (table.length == 0) {
             table = new Node[1];
             table[table.length - 1] = new Node<E>(element);
-        } else if (table.length > 0) {
-            if (!containsSameElement(element)) {
+            return true;
+        }
+        if ( !containsSameElement(element)) {
                 Node<E>[] oldTable = table;
                 Node<E>[] newTable;
                 newTable = Arrays.copyOf(oldTable, table.length + 1);
                 newTable[table.length] = new Node<E>(element);
                 table = newTable;
             }
-        }
         return table[table.length - 1] != null;
     }
 
-    private boolean tableHasOneNull() {
-        for (Node elem : table) {
-            if (elem.equals(null)) {
+    private boolean isTableHasOneNull() {
+        for (Node<E> elem : table) {
+            if (elem.element == null) {
                 return true;
             }
         }
@@ -78,10 +78,8 @@ public class PSVHashSetImpl<E> {
         }
         if (table.length == 0) {
             return null;
-        } else if (table.length > 0) {
-            if (containsSameElement(element)) {
+        } else if (table.length > 0 && containsSameElement(element)) {
                 return element;
-            }
         }
         return null;
     }
@@ -115,7 +113,7 @@ public class PSVHashSetImpl<E> {
 
     private int getSameElementIndex(E element) {
         int index = -1;
-        for (Node elem : table) {
+        for (Node<E> elem : table) {
             ++index;
             if (elem.hashCode() == element.hashCode() && elem.equals(element))
                 return index;
@@ -136,7 +134,7 @@ public class PSVHashSetImpl<E> {
     }
 
     private boolean containsSameElement(E element) {
-        for (Node elem : table) {
+        for (Node<E> elem : table) {
             if (element == null) continue;
             if (elem.hashCode() == element.hashCode() && elem.equals(element))
                 return true;
@@ -153,12 +151,13 @@ public class PSVHashSetImpl<E> {
 
     public String toString() {
         StringBuilder setString = new StringBuilder();
-        if (table != null && table.length > 0)
+        if (table != null && table.length > 0) {
             setString = setString.append("{");
-        for (int i = 0; i < table.length; i++) {
-            setString = setString.append(table[table.length - i - 1]).append(";");
+            for (int i = 0; i < table.length; i++) {
+                setString = setString.append(table[table.length - i - 1]).append(";");
+            }
+            setString = setString.append("}");
         }
-        setString = setString.append("}");
         return setString.deleteCharAt(setString.lastIndexOf(";")).toString();
     }
 }
