@@ -41,7 +41,6 @@ public class PSVHashSetImplTest {
     public void testAddElement() {
         Assert.assertEquals(3,psvHashSet.size());
         psvHashSet5.addElement(null);
-        System.out.println(psvHashSet5);
         Assert.assertEquals(3, psvHashSet5.size());
     }
 
