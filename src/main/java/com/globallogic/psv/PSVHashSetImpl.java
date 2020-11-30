@@ -1,9 +1,8 @@
 package com.globallogic.psv;
 
-import java.util.Arrays;
-import java.util.Objects;
+import java.util.*;
 
-public class PSVHashSetImpl<E> {
+public class PSVHashSetImpl<E> implements Set<E> {
 
     static class Node<E> {
         E element;
@@ -18,7 +17,7 @@ public class PSVHashSetImpl<E> {
 
         public final String toString() {
             if (element == null) {
-                return "";
+                return "null";
             }
             return element.toString();
         }
@@ -41,7 +40,8 @@ public class PSVHashSetImpl<E> {
         this.table = new Node[0];
     }
 
-    public boolean addElement(E element) {
+    @Override
+    public boolean add(Object element) {
         if (table == null) {
             table = new Node[0];
         }
@@ -50,16 +50,16 @@ public class PSVHashSetImpl<E> {
         }
         if (table.length == 0) {
             table = new Node[1];
-            table[table.length - 1] = new Node<E>(element);
+            table[table.length - 1] = new Node(element);
             return true;
         }
-        if ( !containsSameElement(element)) {
-                Node<E>[] oldTable = table;
-                Node<E>[] newTable;
-                newTable = Arrays.copyOf(oldTable, table.length + 1);
-                newTable[table.length] = new Node<E>(element);
-                table = newTable;
-            }
+        if (!containsSameElement(element)) {
+            Node<E>[] oldTable = table;
+            Node<E>[] newTable;
+            newTable = Arrays.copyOf(oldTable, table.length + 1);
+            newTable[table.length] = new Node(element);
+            table = newTable;
+        }
         return table[table.length - 1] != null;
     }
 
@@ -79,19 +79,57 @@ public class PSVHashSetImpl<E> {
         if (table.length == 0) {
             return null;
         } else if (table.length > 0 && containsSameElement(element)) {
-                return element;
+            return element;
         }
         return null;
     }
 
-    public boolean contains(E element) {
+    @Override
+    public boolean contains(Object element) {
         if (table != null && table.length != 0) {
             return containsSameElement(element);
         }
         return false;
     }
 
-    public boolean removeElement(E element) {
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        return false;
+
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends E> c) {
+        return false;
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        return false;
+    }
+
+    @Override
+    public Iterator<E> iterator() {
+        return null;
+    }
+
+    @Override
+    public Object[] toArray() {
+        return new Object[0];
+    }
+
+    @Override
+    public <T> T[] toArray(T[] a) {
+        return null;
+    }
+
+    @Override
+    public boolean remove(Object element) {
         if (table == null) {
             return false;
         } else if (table.length == 0) {
@@ -111,12 +149,17 @@ public class PSVHashSetImpl<E> {
         return false;
     }
 
-    private int getSameElementIndex(E element) {
+    private int getSameElementIndex(Object element) {
         int index = -1;
         for (Node<E> elem : table) {
             ++index;
-            if (elem.hashCode() == element.hashCode() && elem.equals(element))
+            if (element == null && elem.element == null) {
                 return index;
+            } else if (element != null) {
+                if (elem.hashCode() == element.hashCode() && elem.equals(element)) {
+                    return index;
+                }
+            }
         }
         return index;
     }
@@ -133,11 +176,14 @@ public class PSVHashSetImpl<E> {
         table = tab;
     }
 
-    private boolean containsSameElement(E element) {
+    private boolean containsSameElement(Object element) {
         for (Node<E> elem : table) {
-            if (element == null) continue;
-            if (elem.hashCode() == element.hashCode() && elem.equals(element))
+            if (element == null && elem.element == null) {
                 return true;
+            } else if (element != null) {
+                if (elem.hashCode() == element.hashCode() && elem.equals(element))
+                    return true;
+            }
         }
         return false;
     }
